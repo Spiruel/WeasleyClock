@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeasleyClock</string>
+    <string name="addressTextHint">Address</string>
+    <string name="portTextHint">Port</string>
+    <string name="startService">Start Client</string>
+    <string name="stopService">Stop Client</string>
+    <string name="intervalHint">Interval</string>
+</resources>

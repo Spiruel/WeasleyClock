@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <EditText
+            android:id="@+id/addressText"
+            android:hint="@string/addressTextHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <requestFocus />
+
+    </EditText>
+    <EditText
+            android:id="@+id/portText"
+            android:hint="@string/portTextHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number">
+
+    </EditText>
+    <EditText
+            android:id="@+id/intervalText"
+            android:hint="@string/intervalHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number">
+
+    </EditText>
+    <ToggleButton
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="@string/startService"
+            android:textOn="@string/stopService"
+            android:layout_gravity="center_vertical|center_horizontal"></ToggleButton>
+</LinearLayout>
+
