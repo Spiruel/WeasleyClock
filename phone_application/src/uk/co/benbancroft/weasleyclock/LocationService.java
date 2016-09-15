@@ -34,6 +34,7 @@ public class LocationService extends Service {
     private Handler handler = new Handler();
     private Timer timer = null;
 
+    private String mac_address
     private String address;
     private int port;
     private int interval;
@@ -99,6 +100,10 @@ public class LocationService extends Service {
     @Override
     public void onCreate() {
 
+        WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        String this.mac_address = info.getMacAddress();
+        
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -173,6 +178,8 @@ public class LocationService extends Service {
                             locationMessage.append(location.getLongitude());
                             locationMessage.append(":");
                             locationMessage.append(location.getAccuracy());
+                            locationMessage.append(this.mac_address);
+                            locationMessage.append(":");
                             locationMessage.append(":__tc15__");
 
                             outStream.writeBytes(locationMessage.toString() + "\n");
