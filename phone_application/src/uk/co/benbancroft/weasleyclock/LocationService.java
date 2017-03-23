@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,12 +22,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.*;
 
 public class LocationService extends Service {
 
@@ -97,12 +101,39 @@ public class LocationService extends Service {
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
+    public static String getMacAddr() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+            //handle exception
+        }
+        return "";
+    }
+
     @Override
     public void onCreate() {
 
         WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
-        this.mac_address = info.getMacAddress();
+        this.mac_address = getMacAddr();
         
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -179,7 +210,7 @@ public class LocationService extends Service {
                             locationMessage.append(":");
                             locationMessage.append(location.getAccuracy());
                             locationMessage.append(":");
-                            locationMessage.append(this.mac_address);
+                            locationMessage.append(mac_address);
                             locationMessage.append(":__tc15__");
 
                             outStream.writeBytes(locationMessage.toString() + "\n");
